@@ -215,12 +215,9 @@ public class LoginAction implements ActionBean {
       if (debugMode) {
         return new ForwardResolution(DEBUG_PAGE);
       }
-      if (ultraIsEnabled) {
-        rr = new RedirectResolution("/ultra/course", false);
-      } else {
+        // As course id is not provided , deafult redirect to learn home page.
         rr = new RedirectResolution("/", false);
-      }
-      return rr;
+		return rr;
     }
 
     logger.debug("Attempting to load Course.");
