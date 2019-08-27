@@ -219,7 +219,9 @@ public class LoginAction implements ActionBean {
         return new ForwardResolution(DEBUG_PAGE);
       }
 			// As course id is not provided , below logic will apply
-			if (ultraIsEnabled && null != mgr && mgr.isUltraUiDecisionEnabled()
+			if (null != forward) {
+				rr = new RedirectResolution(forward, false);
+			} else if (ultraIsEnabled && null != mgr && mgr.isUltraUiDecisionEnabled()
 					&& null != mgr.getUltraUiLandingPage()) {
 				if (mgr.getUltraUiLandingPage().toString().endsWith(ACTIVITY_STREAM_END_POINT)) {
 					rr = new RedirectResolution("/ultra/stream", false);
@@ -245,7 +247,9 @@ public class LoginAction implements ActionBean {
         return new ForwardResolution(DEBUG_PAGE);
       }
 			// As course is not found , below logic will apply
-			if (ultraIsEnabled && null != mgr && mgr.isUltraUiDecisionEnabled()
+			if (null != forward) {
+				rr = new RedirectResolution(forward, false);
+			} else if (ultraIsEnabled && null != mgr && mgr.isUltraUiDecisionEnabled()
 					&& null != mgr.getUltraUiLandingPage()) {
 				if (mgr.getUltraUiLandingPage().toString().endsWith(ACTIVITY_STREAM_END_POINT)) {
 					rr = new RedirectResolution("/ultra/stream", false);
@@ -269,7 +273,9 @@ public class LoginAction implements ActionBean {
         return new ForwardResolution(DEBUG_PAGE);
       }
 			// As course is unavailable , below logic will apply
-			if (ultraIsEnabled && null != mgr && mgr.isUltraUiDecisionEnabled()
+			if (null != forward) {
+				rr = new RedirectResolution(forward, false);
+			} else if (ultraIsEnabled && null != mgr && mgr.isUltraUiDecisionEnabled()
 					&& null != mgr.getUltraUiLandingPage()) {
 				if (mgr.getUltraUiLandingPage().toString().endsWith(ACTIVITY_STREAM_END_POINT)) {
 					rr = new RedirectResolution("/ultra/stream", false);
