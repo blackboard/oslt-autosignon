@@ -62,6 +62,8 @@ public class LoginAction implements ActionBean {
 
   final Logger logger = LoggerFactory.getLogger(LoginAction.class);
   final static String DEBUG_PAGE = "/WEB-INF/jsp/debuginfo.jsp";
+  final static String ACTIVITY_STREAM_END_POINT = "/ActivityStream";
+  final static String COURSE_LIST_END_POINT = "/CourseList";
 
   @Validate(required = true)
   private String apId;
@@ -179,7 +181,7 @@ public class LoginAction implements ActionBean {
 
     logger.debug("Attempting to load user.");
     User user = authManager.findUser(userId, ap);
-
+    
     if (user == null) {
       addDebugMessage("Couldn't find User: " + userId+". Would redirect to Homepage.");
       if (debugMode) {
@@ -206,7 +208,8 @@ public class LoginAction implements ActionBean {
      */
 
     boolean ultraIsEnabled = ultraUiService.isUltraUiEnabled();
-    String ultraStatus = "";
+    UltraUiManager mgr = UltraUiManager.Factory.getInstance();
+
     RedirectResolution rr;
 
     if (courseId == null || courseId.trim().isEmpty()) {
@@ -215,9 +218,20 @@ public class LoginAction implements ActionBean {
       if (debugMode) {
         return new ForwardResolution(DEBUG_PAGE);
       }
-        // As course id is not provided , deafult redirect to learn home page.
-        rr = new RedirectResolution("/", false);
-		return rr;
+			// As course id is not provided , below logic will apply
+			if (ultraIsEnabled && null != mgr && mgr.isUltraUiDecisionEnabled()
+					&& null != mgr.getUltraUiLandingPage()) {
+				if (mgr.getUltraUiLandingPage().toString().endsWith(ACTIVITY_STREAM_END_POINT)) {
+					rr = new RedirectResolution("/ultra/stream", false);
+				} else if (mgr.getUltraUiLandingPage().toString().endsWith(COURSE_LIST_END_POINT)) {
+					rr = new RedirectResolution("/ultra/course", false);
+				} else {
+					rr = new RedirectResolution("/", false);
+				}
+			} else {
+				rr = new RedirectResolution("/", false);
+			}
+			return rr;
     }
 
     logger.debug("Attempting to load Course.");
@@ -230,12 +244,20 @@ public class LoginAction implements ActionBean {
       if (debugMode) {
         return new ForwardResolution(DEBUG_PAGE);
       }
-      if (ultraIsEnabled) {
-        rr = new RedirectResolution("/ultra/course", false);
-      } else {
-        rr = new RedirectResolution("/", false);
-      }
-      return rr;
+			// As course is not found , below logic will apply
+			if (ultraIsEnabled && null != mgr && mgr.isUltraUiDecisionEnabled()
+					&& null != mgr.getUltraUiLandingPage()) {
+				if (mgr.getUltraUiLandingPage().toString().endsWith(ACTIVITY_STREAM_END_POINT)) {
+					rr = new RedirectResolution("/ultra/stream", false);
+				} else if (mgr.getUltraUiLandingPage().toString().endsWith(COURSE_LIST_END_POINT)) {
+					rr = new RedirectResolution("/ultra/course", false);
+				} else {
+					rr = new RedirectResolution("/", false);
+				}
+			} else {
+				rr = new RedirectResolution("/", false);
+			}
+			return rr;
     }
 
     boolean courseAvailable = apService.userCanAccessCourse(course, user);
@@ -246,12 +268,20 @@ public class LoginAction implements ActionBean {
       if (debugMode) {
         return new ForwardResolution(DEBUG_PAGE);
       }
-      if (ultraIsEnabled) {
-        rr = new RedirectResolution("/ultra/course", false);
-      } else {
-        rr = new RedirectResolution("/", false);
-      }
-      return rr;
+			// As course is unavailable , below logic will apply
+			if (ultraIsEnabled && null != mgr && mgr.isUltraUiDecisionEnabled()
+					&& null != mgr.getUltraUiLandingPage()) {
+				if (mgr.getUltraUiLandingPage().toString().endsWith(ACTIVITY_STREAM_END_POINT)) {
+					rr = new RedirectResolution("/ultra/stream", false);
+				} else if (mgr.getUltraUiLandingPage().toString().endsWith(COURSE_LIST_END_POINT)) {
+					rr = new RedirectResolution("/ultra/course", false);
+				} else {
+					rr = new RedirectResolution("/", false);
+				}
+			} else {
+				rr = new RedirectResolution("/", false);
+			}
+			return rr;
     }
 
     logger.debug("Redirecting to Course.");
@@ -262,7 +292,7 @@ public class LoginAction implements ActionBean {
      *	}
      *	return new RedirectResolution(courseLauncherUrl + course.getId().toExternalString(), false);
      */
-
+   // If course is found in URL, we will land them to Course home page.
     if (ultraIsEnabled) {
 
       if ( course.getUltraStatus().isUltra() ) {

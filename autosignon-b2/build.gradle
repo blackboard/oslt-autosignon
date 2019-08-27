@@ -24,8 +24,8 @@
 apply plugin: 'java'
 apply plugin: 'war'
 
-sourceCompatibility = 1.7
-targetCompatibility = 1.7
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 repositories {
   mavenCentral()
@@ -50,9 +50,9 @@ dependencies {
   compile 'org.slf4j:slf4j-api:1.7.5'
   compile 'org.slf4j:slf4j-log4j12:1.7.5'
 
-  providedCompile 'blackboard.platform:bb-platform:3300.0.1-rel.60'
-  providedCompile 'blackboard.platform:bb-cms-admin:3300.0.1-rel.60'
-  providedCompile 'blackboard.platform:bb-taglibs:3300.0.1-rel.60'
+  providedCompile 'blackboard.platform:bb-platform:3700.0.0'
+  providedCompile 'blackboard.platform:bb-cms-admin:3700.0.0'
+  providedCompile 'blackboard.platform:bb-taglibs:3700.0.0'
   providedCompile 'jstl:jstl:1.2'
   providedCompile 'javax.servlet:servlet-api:2.5'
 
